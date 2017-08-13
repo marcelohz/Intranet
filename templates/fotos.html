@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fotos</title>
+
+
+</head>
+<body>
+
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="direita">
+        {% for foto in fotos %}
+            <img src="../static/fotos/{{ foto[0] }}"><br>
+        {% endfor %}
+    </div>
+{% endblock %}
+</body>
+</html>
