@@ -9,19 +9,17 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-    <div class="direita">
+    <ul>
+        {% for album in albuns %}
+            <li><a href="/fotos/{{ album[0] }}">{{ album[1] }}</a></li>
+        {% endfor %}
+    </ul>
+    <br>
+    <form action="/add_album" method="post">
+        Novo Álbum: <input type="text" name="album"><br>
+        <input type="submit" value="Submit">
+    </form>
 
-        <ul>
-            {% for album in albuns %}
-                <li><a href="/fotos/{{ album[0] }}">{{ album[1] }}</a></li>
-            {% endfor %}
-        </ul>
-        <br>
-        <form action="/add_album" method="post">
-            Novo Álbum: <input type="text" name="album"><br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
 {% endblock %}
 
 </body>

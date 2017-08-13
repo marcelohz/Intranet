@@ -11,11 +11,18 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <div class="direita">
-        {% for foto in fotos %}
-            <img src="../static/fotos/{{ foto[0] }}"><br>
-        {% endfor %}
-    </div>
+
+    <form method='POST' enctype='multipart/form-data' action='/foto_upload'>
+        Enviar foto: <input type=file name=upload><br>
+        <input type="hidden" name="album_id" value="{{ album_id }}">
+        <input type=submit value="Enviar">
+    </form>
+    <br><br>
+
+    {% for foto in fotos %}
+        <img src="../static/pix/{{ foto[0] }}"><br>
+    {% endfor %}
+
 {% endblock %}
 </body>
 </html>
