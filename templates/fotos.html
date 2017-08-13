@@ -11,16 +11,25 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">Enviar Foto:</div>
+        <div class="panel-body">
+            {% if session['usuario'] %}
+                <form method='POST' enctype='multipart/form-data' action='/foto_upload'>
+                    <input class="btn-default" type=submit value="Enviar"><input type=file name=upload>
+                    <input type="hidden" name="album_id" value="{{ album_id }}">
 
-    <form method='POST' enctype='multipart/form-data' action='/foto_upload'>
-        Enviar foto: <input type=file name=upload><br>
-        <input type="hidden" name="album_id" value="{{ album_id }}">
-        <input type=submit value="Enviar">
-    </form>
+                </form>
+            {% endif %}
+        </div>
+    </div>
     <br><br>
 
+    <h3><p class="bg-success text-center">{{ fotos[0][1] }}</p> </h3><!-- nome do album -->
+
+
     {% for foto in fotos %}
-        <img src="../static/pix/{{ foto[0] }}"><br>
+        <img class="foto" src="../static/pix/{{ foto[0] }}"><br>
     {% endfor %}
 
 {% endblock %}

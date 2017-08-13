@@ -14,16 +14,9 @@ h2 {
     height: 40px;
 }
 
-p {
-    color: #ffff66;
-    margin-top: .5em;
-    font-size: .75em;
-    padding-left: 15px;
-}
-
 #navigation-block {
     position: relative;
-    top: 200px;
+    top: 150px;
     left: 15px;
 }
 
@@ -49,6 +42,7 @@ ul#sliding-navigation li.sliding-element h3 {
 }
 
 ul#sliding-navigation li.sliding-element a {
+    border-radius: 25px;
     color: #fff;
     background: #1e47bb;
     border: 1px solid #1a1a1a;
@@ -62,7 +56,13 @@ ul#sliding-navigation li.sliding-element a:hover {
 div.direita {
     position: absolute;
     top: 200px;
-    left: 200px;
+    left: 240px;
     /*background-color: #ff3333;*/
-    width: 70%;
+    /*width: 70%;*/
+}
+
+.foto {
+    display: block;
+    padding: 20px;
+    margin: auto;
 }

@@ -9,16 +9,36 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-    <ul>
-        {% for album in albuns %}
-            <li><a href="/fotos/{{ album[0] }}">{{ album[1] }}</a></li>
-        {% endfor %}
-    </ul>
+
+    {% if session['usuario'] %}
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">Novo Álbum:</div>
+            <div class="panel-body">
+
+
+                <form action="/add_album" method="post">
+                    Nome <input type="text" name="album">
+                    <input class="btn-default" type="submit" value="Criar">
+                </form>
+            </div>
+        </div>
+
+
+
+    {% endif %}
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">Álbuns de fotos</div>
+        <div class="panel-body">
+            <ul>
+                {% for album in albuns %}
+                    <li><a href="/fotos/{{ album[0] }}">{{ album[1] }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
     <br>
-    <form action="/add_album" method="post">
-        Novo Álbum: <input type="text" name="album"><br>
-        <input type="submit" value="Submit">
-    </form>
 
 {% endblock %}
 
