@@ -66,3 +66,17 @@ div.direita {
     padding: 20px;
     margin: auto;
 }
+
+
+.passwordLabel{
+    display: inline-block;
+    float: left;
+    clear: left;
+    width: 200px;
+    text-align: right;
+    padding-right: 8px;
+}
+.passwordInput {
+  display: inline-block;
+  float: left;
+}

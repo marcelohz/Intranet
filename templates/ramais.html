@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ramais</title>
+</head>
+<body>
+{% extends 'layout.html' %}
+{% block content %}
+
+
+    {% if session['usuario'] %}
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">Novo:</div>
+            <div class="panel-body">
+
+                <form action="/add_ramal" method="post">
+                    Nome <input type="text" name="ramal">
+                    <input class="btn-default" type="submit" value="Criar">
+                </form>
+            </div>
+        </div>
+
+    {% endif %}
+
+    <h3><p class="bg-success text-center">Ramais</p></h3>
+
+    <form action="/busca_ramal" method="post">
+        Busque por parte do nome do setor ou funcionário: <input type="text" name="query">
+        <input class="btn-default" type="submit" value="Procurar">
+    </form>
+    <br>
+    <ul>
+        {% for ramal in ramais %}
+            <li>{{ ramal[0] }} - {{ ramal[1] }} </li>
+        {% endfor %}
+    </ul>
+    <br>
+
+{% endblock %}
+</body>
+</html>

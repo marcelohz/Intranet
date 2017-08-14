@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Busca Ramais</title>
+</head>
+<body>
+{% extends 'layout.html' %}
+{% block content %}
+
+
+    <form action="/busca_ramal" method="post">
+        Busque pelo setor ou nome de funcionário: <input type="text" name="query">
+        <input class="btn-default" type="submit" value="Procurar">
+    </form>
+    <br>
+
+    {% for ramal in ramais %}
+        <li>{{ ramal[0] }} - {{ ramal[1] }} - {{ ramal[2] }} </li>
+    {% endfor %}
+
+
+
+{% endblock %}
+
+
+</body>
+</html>

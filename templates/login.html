@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
 </head>
 <body>
 
@@ -10,19 +10,18 @@
 
 {% block content %}
 
- <form action="/login" method="post">
+    <form action="/login" method="post">
 
-  <div class="container">
-    <label><b>Usuário</b></label>
-    <input type="text" placeholder="Enter Username" name="user" required>
-    <br>
-    <label><b>Senha</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required>
+        <div class="container">
+            <label class="passwordLabel"><b>Usuário</b></label>
+            <input class="passwordInput" type="text" name="user" required>
+            <br>
+            <label class="passwordLabel"><b>Senha</b></label>
+            <input class="passwordInput" type="password" name="password" required>
+            <button class="btn-default" type="submit">Login</button>
+        </div>
 
-    <button class="btn-default" type="submit">Login</button>
-  </div>
-
-</form>
+    </form>
 
 {% endblock %}
 
