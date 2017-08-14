@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro Funcionários</title>
+</head>
+<body>
+
+{% extends 'layout.html' %}
+{% block content %}
+
+    <select name="setor_id" form="funcform">
+        {% for setor in setores %}
+            <option value="{{ setor[0] }}">{{ setor[1] }}</option>
+        {% endfor %}
+    </select>
+    <form id="funcform" method="post" action="/funcionarios">
+        <input type="text" value="" name="nome" placeholder="Nome do Funcionário">
+        <input class="btn-default" type="submit" value="Adicionar">
+    </form>
+
+    <br>
+    <h3><p class="bg-primary text-center">Lista de funcionários</p></h3>
+    {% for funcset in funcsets %}
+        <div style="padding: 4px">
+            {{ funcset.setor_nome }} - {{ funcset.func_nome }} <a href="/del_func/{{ funcset.func_id }}"><img
+                src="./static/delete.png" style="display:inline;width:16px;height:16px;border:0;"></a>
+        </div>
+    {% endfor %}
+
+
+{% endblock %}
+
+
+</body>
+</html>

@@ -16,8 +16,11 @@
             <div class="panel-body">
 
                 <form action="/add_ramal" method="post">
-                    Nome <input type="text" name="ramal">
-                    <input class="btn-default" type="submit" value="Criar">
+                    Número <input type="text" name="numero">
+                    Setor <input type="text" name="setor">
+                    <input class="btn-default" type="submit" value="Adicionar">
+
+
                 </form>
             </div>
         </div>
@@ -27,7 +30,7 @@
     <h3><p class="bg-success text-center">Ramais</p></h3>
 
     <form action="/busca_ramal" method="post">
-        Busque por parte do nome do setor ou funcionário: <input type="text" name="query">
+        Busque por parte do nome do funcionário: <input type="text" name="query">
         <input class="btn-default" type="submit" value="Procurar">
     </form>
     <br>

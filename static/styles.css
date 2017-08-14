@@ -55,8 +55,8 @@ ul#sliding-navigation li.sliding-element a:hover {
 
 div.direita {
     position: absolute;
-    top: 200px;
-    left: 240px;
+    top: 250px;
+    left: 250px;
     /*background-color: #ff3333;*/
     /*width: 70%;*/
 }
@@ -79,4 +79,24 @@ div.direita {
 .passwordInput {
   display: inline-block;
   float: left;
+}
+
+.error {
+    color: red
+}
+
+.info {
+    color: blue;
+}
+
+.warning {
+    color: yellow;
+}
+
+img {
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+    max-height: 85%;
+    max-width: 85%;
 }

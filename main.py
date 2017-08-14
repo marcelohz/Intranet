@@ -73,7 +73,7 @@ def foto_upload():
 @app.route('/albuns')
 def albuns():
     cur = conn.cursor()
-    cur.execute("SELECT id, nome FROM intranet.album;")
+    cur.execute('SELECT id, nome FROM intranet.album;')
     albs = cur.fetchall()
     cur.close()
     return render_template('albuns.html', albuns=albs)
@@ -92,26 +92,46 @@ def add_album():
 @app.route('/fotos/<id>')
 def fotos(id):
     cur = conn.cursor()
-    cur.execute("SELECT arquivo, nome FROM intranet.foto, intranet.album where foto.album_id = album.id and album_id = %s;", (id,))
+    cur.execute('SELECT arquivo, nome FROM intranet.foto, intranet.album where foto.album_id = album.id and album_id = %s;', (id,))
     fotos = cur.fetchall()
     cur.close()
 
     return render_template('fotos.html', fotos=fotos, album_id=id)
 
+
 @app.route('/busca_ramal', methods=['POST'])
 def busca_ramal():
     sql = '''
-      SELECT setor.nome, funcionario.nome, numero from intranet.setor, intranet.funcionario, intranet.ramal
-          where funcionario.setor_id = setor.id and ramal.setor_id = setor.id
-          and (setor.nome ilike %s or funcionario.nome ilike %s)
-          order by setor.nome, funcionario.nome
+      SELECT distinct setor.nome, string_agg(distinct funcionario.nome, ', '), string_agg(distinct numero, ', ') from intranet.setor, intranet.funcionario, intranet.ramal
+          where funcionario.setor_id = setor.id and ramal.setor_id = setor.id and funcionario.nome ilike %s group by setor.nome
     '''
     query = request.form.get('query')
     cur = conn.cursor()
-    cur.execute(sql, ('%' + query +'%', '%' + query +'%'))
+    cur.execute(sql, ('%' + query +'%',))
     ramais = cur.fetchall()
     cur.close()
     return render_template('busca_ramal.html', ramais = ramais)
+
+
+@app.route('/add_ramal', methods=['POST'])
+def add_ramal():
+    cur = conn.cursor()
+    sql = 'SELECT setor.id from intranet.setor where nome = upper(%s)'
+    cur.execute(sql, (request.form.get('setor'),))
+    setor_id = cur.fetchone()
+    if setor_id is None:
+        flash('Setor inexistente.', 'error')
+        return redirect("/ramais")
+
+    sql = 'insert into intranet.ramal (numero, setor_id) values (%s, %s) RETURNING *;'
+    cur.execute(sql, (request.form.get("numero"), setor_id))
+    conn.commit()
+    test = cur.fetchone()
+    cur.close()
+    if test != None:
+        flash('Ramal adicionado.', 'info')
+    return redirect("/ramais")
+
 
 @app.route('/ramais')
 def ramais():
@@ -120,7 +140,7 @@ def ramais():
     sql = '''SELECT setor.nome, numero from intranet.setor, intranet.ramal
           where ramal.setor_id = setor.id
           order by setor.nome
-    '''
+        '''
     cur.execute(sql)
     ramais = cur.fetchall()
     cur.close()
@@ -128,9 +148,46 @@ def ramais():
     return render_template('ramais.html', ramais = ramais)
 
 
+@app.route('/del_func/<id>')
+def delfunc(id):
+    if session['usuario'] is None:
+        return redirect(404)
+    cur = conn.cursor()
+    cur.execute('delete from intranet.funcionario where id = %s;', (id,))
+    conn.commit()
+    flash('Funcionário excluído', 'info')
+    return redirect('/funcionarios')
+
+
+@app.route('/funcionarios', methods=['GET', 'POST'])
+def funcionarios():
+    sql = "select id, nome from intranet.setor order by nome"
+    cur = conn.cursor()
+    cur.execute(sql)
+    setores = cur.fetchall()
+    cur.close()
+
+    # posts = [dict(fName=row[0], lName=row[1], email=row[2], phone=row[3], photoName=row[4],  photo=row[5], blurb=row[6], id=row[7], approved=row[8], vote=row[9]) for row in cur.fetchall()]
+    sql = 'select funcionario.id, funcionario.nome, setor.id, setor.nome from intranet.setor, intranet.funcionario where funcionario.setor_id = setor.id'
+    cur = conn.cursor()
+    cur.execute(sql)
+    funcsets = [dict(func_id=r[0], func_nome=r[1], setor_id=r[2], setor_nome=r[3]) for r in cur.fetchall()]
+    cur.close()
+
+    if request.method == 'POST':
+        sql = 'insert into intranet.funcionario(nome, setor_id) values(%s, %s)'
+        cur = conn.cursor()
+        cur.execute(sql, (request.form.get('nome'), request.form.get('setor_id')))
+        conn.commit()
+        cur.close()
+        flash('Funcionário cadastrado.', 'info')
+        return redirect('/funcionarios')
+    return render_template('funcionarios.html', setores=setores, funcsets=funcsets)
+
+
 @app.errorhandler(404)
 def not_found(error):
-    return "URL inexiste. 404.", 404
+    return 'URL inexiste. 404.', 404
 
 
 @app.errorhandler(500)
