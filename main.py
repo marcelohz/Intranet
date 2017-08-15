@@ -7,7 +7,7 @@ from flask import Flask, session, redirect, url_for, request, send_from_director
 from flask import render_template, flash
 from werkzeug.utils import secure_filename
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 UPLOAD_FOLDER = app.root_path + '/static/pix/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -95,8 +95,19 @@ def fotos(id):
     cur.execute('SELECT arquivo, nome FROM intranet.foto, intranet.album where foto.album_id = album.id and album_id = %s;', (id,))
     fotos = cur.fetchall()
     cur.close()
-
     return render_template('fotos.html', fotos=fotos, album_id=id)
+
+
+@app.route('/del_foto/<arquivo>')
+def del_foto(arquivo):
+    if session['usuario'] is None:
+        return redirect(404)
+    sql = 'delete from intranet.foto where arquivo = %s'
+    cur = conn.cursor()
+    cur.execute(sql, (arquivo,))
+    conn.commit()
+    cur.close()
+    os.remove(app.root_path + '/static/pix/' + arquivo)
 
 
 @app.route('/busca_ramal', methods=['POST'])
@@ -149,7 +160,7 @@ def ramais():
 
 
 @app.route('/del_func/<id>')
-def delfunc(id):
+def del_func(id):
     if session['usuario'] is None:
         return redirect(404)
     cur = conn.cursor()
@@ -167,7 +178,6 @@ def funcionarios():
     setores = cur.fetchall()
     cur.close()
 
-    # posts = [dict(fName=row[0], lName=row[1], email=row[2], phone=row[3], photoName=row[4],  photo=row[5], blurb=row[6], id=row[7], approved=row[8], vote=row[9]) for row in cur.fetchall()]
     sql = 'select funcionario.id, funcionario.nome, setor.id, setor.nome from intranet.setor, intranet.funcionario where funcionario.setor_id = setor.id'
     cur = conn.cursor()
     cur.execute(sql)

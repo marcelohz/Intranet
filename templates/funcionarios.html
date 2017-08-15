@@ -9,14 +9,14 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-    <select name="setor_id" form="funcform">
+    <select style="display:inline;" name="setor_id" form="funcform">
         {% for setor in setores %}
             <option value="{{ setor[0] }}">{{ setor[1] }}</option>
         {% endfor %}
     </select>
     <form id="funcform" method="post" action="/funcionarios">
-        <input type="text" value="" name="nome" placeholder="Nome do Funcionário">
-        <input class="btn-default" type="submit" value="Adicionar">
+        <input style="display:inline;" type="text" value="" name="nome" placeholder="Nome do Funcionário">
+        <input style="display:inline;" class="btn-default" type="submit" value="Adicionar">
     </form>
 
     <br>
