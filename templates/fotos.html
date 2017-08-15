@@ -26,16 +26,22 @@
 </div>
     <br><br>
 
-    {% if fotos %}
-        <h3><p class="bg-success text-center">{{ fotos[0][1] }}</p></h3><!-- nome do album -->
-        {% else %}
-            <p class="bg-warning text-center">Sem fotos cadastradas</p></h3><!-- nome do album -->
-    {% endif %}
 
-    {% for foto in fotos %}
-        <img class="foto" src="../static/pix/{{ foto[0] }}"><a href="/del_pic/{{ foto[0] }}"><img
-                src="../static/delete.png" style="display:inline;width:16px;height:16px;border:0;"></a><br>
-    {% endfor %}
+    <div style="text-align:center">
+
+        {% if fotos %}
+            <h3><p class="bg-success text-center">{{ fotos[0][1] }}</p></h3><!-- nome do album -->
+        {% else %}
+            <p class="bg-warning text-center">Sem fotos cadastradas</p></h3>
+        {% endif %}
+
+        {% for foto in fotos %}
+            <img class="foto" src="../static/pix/{{ foto[0] }}">{% if session['usuario'] %}
+            <a href="/del_foto/{{ foto[0] }}"><img class="exclui_foto" src="../static/delete.png"></a><br>
+        {% endif %}
+        {% endfor %}
+    </div>
+
 
 {% endblock %}
 </body>
