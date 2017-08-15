@@ -19,7 +19,6 @@
         <form method='POST' enctype='multipart/form-data' action='/foto_upload'>
             <input class="btn-default" type=submit value="Enviar"><input type=file name=upload>
             <input type="hidden" name="album_id" value="{{ album_id }}">
-
         </form>
     {% endif %}
 </div>
@@ -36,9 +35,10 @@
         {% endif %}
 
         {% for foto in fotos %}
-            <img class="foto" src="../static/pix/{{ foto[0] }}">{% if session['usuario'] %}
-            <a href="/del_foto/{{ foto[0] }}"><img class="exclui_foto" src="../static/delete.png"></a><br>
-        {% endif %}
+            <a href="../static/pix/{{ foto[0] }}"> <img class="foto" src="../static/pix/{{ foto[0] }}"></a>
+            {% if session['usuario'] %}
+                <a href="/del_foto/{{ foto[0] }}"><img class="exclui_foto" src="../static/delete.png"></a><br>
+            {% endif %}
         {% endfor %}
     </div>
 

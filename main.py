@@ -37,6 +37,7 @@ def logout():
     session['usuario'] = None
     return redirect('/')
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -49,7 +50,7 @@ def login():
         cur = conn.cursor()
         cur.execute("SELECT intranet.autentica(%s, %s, %s, %s);", (user, password, ip, hostname))
         result = cur.fetchone()
-        conn.commit() # commitamos o insert que existe na função autentica
+        conn.commit()  # commitamos o insert que existe na função autentica
         cur.close()
         if result[0] is True:
             session['usuario'] = user
