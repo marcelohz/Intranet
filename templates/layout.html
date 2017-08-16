@@ -14,17 +14,17 @@
 
 <div id="content">
     <div class="direita">
-
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class=flashes>
                     {% for category, message in messages %}
-                        <div class="{{ category }}"><li>{{ message }}</div></li>
+                        <div class="{{ category }}">
+                            <li>
+                            {{ message }}</div></li>
                     {% endfor %}
                 </ul>
             {% endif %}
         {% endwith %}
-
 
         {% block content %}
         {% endblock %}

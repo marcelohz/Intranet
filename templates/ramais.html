@@ -19,8 +19,6 @@
                     Número <input type="text" name="numero">
                     Setor <input type="text" name="setor">
                     <input class="btn-default" type="submit" value="Adicionar">
-
-
                 </form>
             </div>
         </div>
@@ -34,11 +32,13 @@
         <input class="btn-default" type="submit" value="Procurar">
     </form>
     <br>
-    <ul>
-        {% for ramal in ramais %}
-            <li>{{ ramal[0] }} - {{ ramal[1] }} </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <ul class="list-group">
+            {% for ramal in ramais %}
+                <li class="list-group-item">{{ ramal[0] }} - {{ ramal[1] }} </li>
+            {% endfor %}
+        </ul>
+    </div>
     <br>
 
 {% endblock %}

@@ -25,7 +25,6 @@
 </div>
     <br><br>
 
-
     <div style="text-align:center">
 
         {% if fotos %}
@@ -35,13 +34,12 @@
         {% endif %}
 
         {% for foto in fotos %}
-            <a href="../static/pix/{{ foto[0] }}"> <img class="foto" src="../static/pix/{{ foto[0] }}"></a>
+            <a href="../static/pix/{{ foto[0] }}"> <img class="foto img-rounded" src="../static/pix/{{ foto[0] }}"></a>
             {% if session['usuario'] %}
                 <a href="/del_foto/{{ foto[0] }}"><img class="exclui_foto" src="../static/delete.png"></a><br>
             {% endif %}
         {% endfor %}
     </div>
-
 
 {% endblock %}
 </body>

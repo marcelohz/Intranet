@@ -1,8 +1,11 @@
 import os
+import random
 
 import secrets
+import string
 
 import psycopg2
+
 from flask import Flask, session, redirect, url_for, request, send_from_directory
 from flask import render_template, flash
 from werkzeug.utils import secure_filename
@@ -67,7 +70,9 @@ def foto_upload():
         file = request.files['upload']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            filename = secrets.token_hex(8) + "." + filename.rsplit('.', 1)[1].lower()
+            # filename = secrets.token_hex(8) + "." + filename.rsplit('.', 1)[1].lower()
+            rnd = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
+            filename = rnd + "." + filename.rsplit('.', 1)[1].lower()
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             cur = conn.cursor()
             cur.execute('INSERT INTO intranet.foto (album_id, arquivo) VALUES (%s, %s);', (album_id, filename))
