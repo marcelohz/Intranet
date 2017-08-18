@@ -1,11 +1,7 @@
 import os
 import random
-
-import secrets
 import string
-
 import psycopg2
-
 from flask import Flask, session, redirect, url_for, request, send_from_directory
 from flask import render_template, flash
 from werkzeug.utils import secure_filename
@@ -49,9 +45,8 @@ def login():
         user = str(request.form.get('user'))
         password = str(request.form.get('password'))
         ip = request.remote_addr
-        hostname = request.host
         cur = conn.cursor()
-        cur.execute("SELECT intranet.autentica(%s, %s, %s, %s);", (user, password, ip, hostname))
+        cur.execute("SELECT intranet.autentica(%s, %s, %s);", (user, password, ip))
         result = cur.fetchone()
         conn.commit()  # commitamos o insert que existe na função autentica
         cur.close()
@@ -162,7 +157,7 @@ def add_ramal():
     test = cur.fetchone()
     cur.close()
     if test is not None:
-        flash('Ramal adicionado.', 'info')
+        flash('Ramal cadastrado.', 'success')
     return redirect("/ramais")
 
 
@@ -170,7 +165,7 @@ def add_ramal():
 def ramais():
     cur = conn.cursor()
 
-    sql = '''SELECT setor.nome, numero FROM intranet.setor, intranet.ramal
+    sql = '''SELECT setor.nome, numero, ramal.id FROM intranet.setor, intranet.ramal
           WHERE ramal.setor_id = setor.id
           ORDER BY setor.nome
         '''
@@ -181,6 +176,17 @@ def ramais():
     return render_template('ramais.html', ramais=ramais)
 
 
+@app.route('/del_ramal/<id>')
+def del_ramal(id):
+    if session['usuario'] is None:
+        return redirect(404)
+    cur = conn.cursor()
+    cur.execute('DELETE FROM intranet.ramal WHERE id = %s;', (id,))
+    conn.commit()
+    flash('Ramal excluído', 'success')
+    return redirect('/ramais')
+
+
 @app.route('/del_func/<id>')
 def del_func(id):
     if session['usuario'] is None:
@@ -188,7 +194,7 @@ def del_func(id):
     cur = conn.cursor()
     cur.execute('DELETE FROM intranet.funcionario WHERE id = %s;', (id,))
     conn.commit()
-    flash('Funcionário excluído', 'info')
+    flash('Funcionário excluído', 'success')
     return redirect('/funcionarios')
 
 
@@ -214,7 +220,7 @@ def funcionarios():
         cur.execute(sql, (request.form.get('nome'), request.form.get('setor_id')))
         conn.commit()
         cur.close()
-        flash('Funcionário cadastrado.', 'info')
+        flash('Funcionário cadastrado.', 'success')
         return redirect('/funcionarios')
     return render_template('funcionarios.html', setores=setores, funcsets=funcsets)
 
@@ -230,4 +236,4 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=80)

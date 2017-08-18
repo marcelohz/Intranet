@@ -35,7 +35,10 @@
     <div class="container">
         <ul class="list-group">
             {% for ramal in ramais %}
-                <li class="list-group-item">{{ ramal[0] }} - {{ ramal[1] }} </li>
+                <li class="list-group-item">{{ ramal[0] }} - {{ ramal[1] }}
+                    <a href="/del_ramal/{{ ramal[2] }}"><img src="./static/delete.png"
+                                                             class="excluir"></a>
+                </li>
             {% endfor %}
         </ul>
     </div>

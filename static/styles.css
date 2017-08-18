@@ -47,6 +47,7 @@ ul#sliding-navigation li.sliding-element a {
     background: #1e47bb;
     border: 1px solid #1a1a1a;
     text-decoration: none;
+    filter: drop-shadow(8px 8px 10px black);
 }
 
 ul#sliding-navigation li.sliding-element a:hover {
@@ -93,6 +94,11 @@ div.direita {
     color: yellow;
 }
 
+.success {
+    color: green;
+}
+
+
 img {
     padding: 0;
     display: block;
@@ -100,6 +106,7 @@ img {
     max-height: 85%;
     max-width: 85%;
     border-radius: 8px;
+    filter: drop-shadow(8px 8px 10px black);
 }
 
 .foto {
@@ -114,4 +121,11 @@ img {
     position: relative;
     width: 16px;
     height: 16px;
+}
+
+.excluir {
+    display:inline;
+    width:16px;
+    height:16px;
+    border:0;
 }

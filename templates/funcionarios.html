@@ -21,12 +21,19 @@
 
     <br>
     <h3><p class="bg-primary text-center">Lista de funcionários</p></h3>
-    {% for funcset in funcsets %}
-        <div style="padding: 4px">
-            {{ funcset.setor_nome }} - {{ funcset.func_nome }} <a href="/del_func/{{ funcset.func_id }}"><img
-                src="./static/delete.png" style="display:inline;width:16px;height:16px;border:0;"></a>
-        </div>
-    {% endfor %}
+    <div class="container">
+        <ul class="list-group">
+            {% for funcset in funcsets %}
+                <li class="list-group-item">
+                    <div style="padding: 4px">
+                        {{ funcset.setor_nome }} - {{ funcset.func_nome }}
+                        <a href="/del_func/{{ funcset.func_id }}"><img src="./static/delete.png" class="excluir"></a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
 
 
 {% endblock %}
