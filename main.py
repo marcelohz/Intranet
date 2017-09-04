@@ -6,6 +6,7 @@ from flask import Flask, session, redirect, url_for, request, send_from_director
 from flask import render_template, flash
 from werkzeug.utils import secure_filename
 
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 UPLOAD_FOLDER = app.root_path + '/static/pix/'
@@ -15,7 +16,6 @@ app.config.from_object(__name__)
 
 conn = psycopg2.connect("host=localhost dbname=intranet password=master user=postgres")
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -23,17 +23,51 @@ def allowed_file(filename):
 
 @app.route('/favicon.ico')
 def favicon():
+    request
     return send_from_directory(app.root_path, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if request.headers.get('X-Forwarded-For'):
+        ip = request.headers.get('X-Forwarded-For')
+    else:
+        ip = request.remote_addr
+
+    usuario = pega_login(ip)
+    return render_template('index.html', usuario=usuario, req=request.remote_addr)
+
+def registra_login(user, ip):
+    cur = conn.cursor()
+    if request.headers.get('X-Forwarded-For'):
+        ip = request.headers.get('X-Forwarded-For')
+    cur.execute("delete from intranet.login where ip = %s;", (ip,))
+    cur.execute("INSERT INTO intranet.login(nome, ip) VALUES(%s, %s);", (user,ip))
+    conn.commit()
+    cur.close()
+
+def pega_login(ip):
+    if request.headers.get('X-Forwarded-For'):
+        ip = request.headers.get('X-Forwarded-For')
+    cur = conn.cursor()
+    cur.execute("select nome from intranet.login where ip = %s;", (ip,))
+    usuario = cur.fetchone()[0]
+    cur.close()
+    session['login'] = { ip: usuario }
+    return usuario
+
+
+
+@app.route('/registra_user/<user>')
+def registra_user(user):
+    registra_login(user, request.remote_addr)
+    session['login'] = { request.remote_addr : user }
+    return render_template('index.html', usuario=user)
 
 
 @app.route('/logout')
 def logout():
-    session['usuario'] = None
+    session['admin'] = None
     return redirect('/')
 
 
@@ -51,7 +85,7 @@ def login():
         conn.commit()  # commitamos o insert que existe na função autentica
         cur.close()
         if result[0] is True:
-            session['usuario'] = user
+            session['admin'] = user
             return render_template('index.html')
         else:
             flash(u'Usuário ou senha inválida')
@@ -108,7 +142,7 @@ def fotos(id):
 
 @app.route('/del_foto/<arquivo>')
 def del_foto(arquivo):
-    if session['usuario'] is None:
+    if session['admin'] is None:
         return redirect(404)
 
     # primeiro pegamos o album pra saber pra onde voltar
@@ -178,7 +212,7 @@ def ramais():
 
 @app.route('/del_ramal/<id>')
 def del_ramal(id):
-    if session['usuario'] is None:
+    if session['admin'] is None:
         return redirect(404)
     cur = conn.cursor()
     cur.execute('DELETE FROM intranet.ramal WHERE id = %s;', (id,))
@@ -189,7 +223,7 @@ def del_ramal(id):
 
 @app.route('/del_func/<id>')
 def del_func(id):
-    if session['usuario'] is None:
+    if session['admin'] is None:
         return redirect(404)
     cur = conn.cursor()
     cur.execute('DELETE FROM intranet.funcionario WHERE id = %s;', (id,))

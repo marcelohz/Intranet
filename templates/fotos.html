@@ -11,7 +11,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    {% if session['usuario'] %}
+    {% if session['admin'] %}
         <div class="panel panel-primary">
         <div class="panel-heading">Enviar Foto:</div>
         <div class="panel-body">
@@ -35,7 +35,7 @@
 
         {% for foto in fotos %}
             <a href="../static/pix/{{ foto[0] }}"> <img class="foto img-rounded" src="../static/pix/{{ foto[0] }}"></a>
-            {% if session['usuario'] %}
+            {% if session['admin'] %}
                 <a href="/del_foto/{{ foto[0] }}"><img class="exclui_foto" src="../static/delete.png"></a><br>
             {% endif %}
         {% endfor %}
